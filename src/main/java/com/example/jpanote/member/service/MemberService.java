@@ -1,7 +1,8 @@
 package com.example.jpanote.member.service;
 
 import com.example.jpanote.exception.DuplicateEmailException;
-import com.example.jpanote.exception.UserNotFoundException;
+import com.example.jpanote.exception.MemberNotFoundException;
+import com.example.jpanote.exception.WithdrawnMemberException;
 import com.example.jpanote.member.model.dto.*;
 import com.example.jpanote.member.model.entity.MemberEntity;
 import com.example.jpanote.member.repository.MemberRepository;
@@ -46,10 +47,11 @@ public class MemberService {
 	//회원 조회
 	public ReadResponse readMember(Long id){
 		//조회
-		MemberEntity memberEntity = memberRepository.findById(id)
-				.orElseThrow(() -> new NullPointerException("조회 하신 회원이 존재하지 않습니다."));
+		Optional<MemberEntity> findMember = memberRepository.findById(id);
+		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
+		//탈퇴한 회원일 경우
 		if(memberEntity.getDelFlag() != 0){
-			throw new UserNotFoundException("탈퇴한 회원 입니다.");
+			throw new WithdrawnMemberException("탈퇴한 회원 입니다.");
 		}
 		//DTO 타입 으로 반환
 		return ReadResponse.builder()
@@ -74,8 +76,8 @@ public class MemberService {
 		//비밀번호 암호화
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		//조회
-		MemberEntity memberEntity = memberRepository.findById(request.getId())
-				.orElseThrow(() -> new NullPointerException("조회 하신 회원이 존재하지 않습니다."));
+		Optional<MemberEntity> findMember = memberRepository.findById(request.getId());
+		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 //		log.info("----------------------------------------------");
 		//회원정보 수정
 		memberEntity.updateMember(
@@ -98,8 +100,8 @@ public class MemberService {
 	@Transactional
 	public Long removeMember(Long id){
 		//조회
-		MemberEntity memberEntity = memberRepository.findById(id)
-				.orElseThrow(() -> new NullPointerException("조회 하신 회원이 존재하지 않습니다."));
+		Optional<MemberEntity> findMember = memberRepository.findById(id);
+		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 		//삭제
 		memberEntity.removeMember();
 		memberRepository.save(memberEntity);

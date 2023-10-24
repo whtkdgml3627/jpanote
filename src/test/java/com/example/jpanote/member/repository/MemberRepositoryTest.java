@@ -1,7 +1,8 @@
 package com.example.jpanote.member.repository;
 
 import com.example.jpanote.exception.DuplicateEmailException;
-import com.example.jpanote.exception.UserNotFoundException;
+import com.example.jpanote.exception.MemberNotFoundException;
+import com.example.jpanote.exception.WithdrawnMemberException;
 import com.example.jpanote.member.model.entity.MemberEntity;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Assertions;
@@ -9,13 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
@@ -33,7 +30,7 @@ public class MemberRepositoryTest {
 
 	@Test
 	@DisplayName("회원 등록 Repository 테스트")
-	@Transactional
+	//@Transactional
 	public void createMemberTest() throws Exception {
 		//given
 		//Entity에 값을 지정
@@ -66,9 +63,9 @@ public class MemberRepositoryTest {
 		Optional<MemberEntity> findMember = memberRepository.findById(TEST_MEMBER_NO);
 
 		//when
-		MemberEntity memberEntity = findMember.orElseThrow(() -> new NullPointerException("조회 하신 회원이 존재하지 않습니다."));
+		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 		if(memberEntity.getDelFlag() != 0){
-			throw new UserNotFoundException("탈퇴한 회원 입니다.");
+			throw new WithdrawnMemberException("탈퇴한 회원 입니다.");
 		}
 
 		//then
@@ -83,7 +80,7 @@ public class MemberRepositoryTest {
 		Optional<MemberEntity> findMember = memberRepository.findById(TEST_MEMBER_NO);
 
 		//when
-		MemberEntity memberEntity = findMember.orElseThrow(() -> new NullPointerException("조회 하신 회원이 존재하지 않습니다."));
+		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 
 		//데이터 수정
 		memberEntity.updateMember(
@@ -110,7 +107,7 @@ public class MemberRepositoryTest {
 		Optional<MemberEntity> findMember = memberRepository.findById(TEST_MEMBER_NO);
 
 		//when
-		MemberEntity memberEntity = findMember.orElseThrow(() -> new NullPointerException("조회 하신 회원이 존재하지 않습니다."));
+		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 
 		//삭제
 		//memberRepository.deleteById(TEST_MEMBER_NO);
