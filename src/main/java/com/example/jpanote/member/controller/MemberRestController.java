@@ -36,6 +36,7 @@ public class MemberRestController {
 		return memberService.updateMember(request);
 	}
 
+	//회원 탈퇴
 	@DeleteMapping("/leave/{id}")
 	public Map<String, Long> remove(@PathVariable Long id){
 		Long memberId = memberService.removeMember(id);

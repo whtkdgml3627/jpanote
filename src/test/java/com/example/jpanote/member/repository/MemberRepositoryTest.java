@@ -61,9 +61,9 @@ public class MemberRepositoryTest {
 	public void readMemberTest() throws Exception {
 		//given
 		Optional<MemberEntity> findMember = memberRepository.findById(TEST_MEMBER_NO);
+		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 
 		//when
-		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 		if(memberEntity.getDelFlag() != 0){
 			throw new WithdrawnMemberException("탈퇴한 회원 입니다.");
 		}
@@ -78,10 +78,9 @@ public class MemberRepositoryTest {
 	public void updateMemberTest() throws Exception {
 		//given
 		Optional<MemberEntity> findMember = memberRepository.findById(TEST_MEMBER_NO);
-
-		//when
 		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 
+		//when
 		//데이터 수정
 		memberEntity.updateMember(
 				TEST_MEMBER_UPDATE_EMAIL, TEST_MEMBER_NAME, TEST_MEMBER_PW
@@ -105,10 +104,9 @@ public class MemberRepositoryTest {
 	public void removeMemberTest() throws Exception {
 		//given
 		Optional<MemberEntity> findMember = memberRepository.findById(TEST_MEMBER_NO);
-
-		//when
 		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 
+		//when
 		//삭제
 		//memberRepository.deleteById(TEST_MEMBER_NO);
 		memberEntity.removeMember();
