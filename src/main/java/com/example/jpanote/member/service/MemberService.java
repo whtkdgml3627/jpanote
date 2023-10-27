@@ -133,7 +133,8 @@ public class MemberService {
 	@Transactional
 	public Long removeMember(Long id){
 		//조회
-		Optional<MemberEntity> findMember = memberRepository.findById(id);
+		// db에서 사용자를 delete 하는게 아니라 정보만 지우고 update 했기 때문에, findById 의 null check 만으로는 이미 탈퇴한 회원인지 구분할 수 없습니다.
+		Optional<MemberEntity> findMember = Optional.ofNullable(memberRepository.findByIdAndDelFlag(id, 0));
 		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 		//삭제
 		memberEntity.removeMember();
