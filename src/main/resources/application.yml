@@ -27,3 +27,4 @@ logging:
     com:
       example:
         jpanote: debug
+  config: classpath:logback/logback-spring.xml

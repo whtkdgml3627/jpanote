@@ -36,7 +36,17 @@ public class MemberEntity extends BaseEntity {
 	private int delFlag;
 
 
-	//회원 생성 메소드
+	/**
+	 * methodName : createMember
+	 * author : Jo Sang Hee
+	 * description : 회원 생성 메소드
+	 * Create member member entity.
+	 *
+	 * @param memberEmail the member email
+	 * @param memberName  the member name
+	 * @param memberPw    the member pw
+	 * @return the member entity
+	 */
 	public static MemberEntity createMember(String memberEmail, String memberName, String memberPw){
 		return MemberEntity.builder()
 				.memberEmail(memberEmail)
@@ -45,14 +55,28 @@ public class MemberEntity extends BaseEntity {
 				.build();
 	}
 
-	//회원 수정 메소드
+	/**
+	 * methodName : updateMember
+	 * author : Jo Sang Hee
+	 * description : 회원 수정 메소드
+	 * Update member.
+	 *
+	 * @param memberEmail the member email
+	 * @param memberName  the member name
+	 * @param memberPw    the member pw
+	 */
 	public void updateMember(String memberEmail, String memberName, String memberPw){
 		this.memberEmail = memberEmail;
 		this.memberName = memberName;
 		this.memberPw = memberPw;
 	}
 
-	//회원 삭제 메소드
+	/**
+	 * methodName : removeMember
+	 * author : Jo Sang Hee
+	 * description : 회원 삭제 메소드
+	 * Remove member.
+	 */
 	public void removeMember(){
 		this.memberName = "";
 		this.memberPw = "";

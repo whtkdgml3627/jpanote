@@ -56,7 +56,18 @@ public class NoteEntity extends BaseEntity {
 	@JoinColumn(name = "receiver_id", referencedColumnName = "member_id")
 	private MemberEntity member2;
 
-	//쪽지 생성 메소드
+	/**
+	 * methodName : createNote
+	 * author : Jo Sang Hee
+	 * description : 쪽지 생성 메소드
+	 * Create note note entity.
+	 *
+	 * @param title     the title
+	 * @param cont      the cont
+	 * @param reciverId the reciver id
+	 * @param senderId  the sender id
+	 * @return the note entity
+	 */
 	public static NoteEntity createNote(String title, String cont, MemberEntity reciverId, MemberEntity senderId){
 		return NoteEntity.builder()
 				.title(title)
@@ -66,19 +77,37 @@ public class NoteEntity extends BaseEntity {
 				.build();
 	}
 
-	//쪽지 읽은 상태 시간 업데이트
+	/**
+	 * methodName : changeStat
+	 * author : Jo Sang Hee
+	 * description : 쪽지 읽은 상태 시간 업데이트
+	 * Change stat.
+	 */
 	public void changeStat(){
 		this.readDt = LocalDateTime.now();
 		this.readStat = 1;
 	}
 
-	//쪽지 내용 수정
+	/**
+	 * methodName : updateNote
+	 * author : Jo Sang Hee
+	 * description : 쪽지 내용 수정
+	 * Update note.
+	 *
+	 * @param title the title
+	 * @param cont  the cont
+	 */
 	public void updateNote(String title, String cont){
 		this.title = title;
 		this.cont = cont;
 	}
 
-	//쪽지 삭제
+	/**
+	 * methodName : removeNote
+	 * author : Jo Sang Hee
+	 * description : 쪽지 삭제
+	 * Remove note.
+	 */
 	public void removeNote(){
 		this.title = "";
 		this.cont = "";

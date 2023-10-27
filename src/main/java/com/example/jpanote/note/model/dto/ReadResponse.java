@@ -1,5 +1,6 @@
 package com.example.jpanote.note.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class ReadResponse {
 	private Long id;
 	private String title;
 	private String cont;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime readDt;
 	private int readStat;
 	private int delFlag;

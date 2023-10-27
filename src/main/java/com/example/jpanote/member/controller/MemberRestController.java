@@ -17,32 +17,68 @@ public class MemberRestController {
 
 	private final MemberService memberService;
 
-	//회원 등록
+	/**
+	 * methodName : create
+	 * author : Jo Sang Hee
+	 * description : 회원 등록
+	 * Create create response.
+	 *
+	 * @param request the request
+	 * @return the create response
+	 */
 	@PostMapping("/join")
 	public CreateResponse create(@RequestBody CreateRequest request){
 		return memberService.createMember(request);
 	}
 
-	//회원 조회
+	/**
+	 * methodName : getById
+	 * author : Jo Sang Hee
+	 * description : 회원 조회
+	 * Get by id read response.
+	 *
+	 * @param id the id
+	 * @return the read response
+	 */
 	@GetMapping("/my-page/{id}")
 	public ReadResponse getById(@PathVariable Long id){
 		return memberService.readMember(id);
 	}
 
-	//회원 수정
+	/**
+	 * methodName : update
+	 * author : Jo Sang Hee
+	 * description : 회원 수정
+	 * Update update response.
+	 *
+	 * @param request the request
+	 * @return the update response
+	 */
 	@PutMapping("/modify")
 	public UpdateResponse update(@RequestBody UpdateRequest request){
 		if(request.getId() == null) throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
 		return memberService.updateMember(request);
 	}
 
-	//회원 탈퇴
+	/**
+	 * methodName : remove
+	 * author : Jo Sang Hee
+	 * description : 회원 탈퇴
+	 * Remove map.
+	 *
+	 * @param id the id
+	 * @return the map
+	 */
 	@DeleteMapping("/leave/{id}")
 	public Map<String, Long> remove(@PathVariable Long id){
 		Long memberId = memberService.removeMember(id);
 		return Map.of("memberId", memberId);
 	}
 
-
+	@PostMapping("/login")
+	public Map<String, Long> login(@RequestBody LoginRequest request){
+		Long memberId = memberService.LoginMember(request);
+		return Map.of("memberId", memberId);
+	}
 
 }

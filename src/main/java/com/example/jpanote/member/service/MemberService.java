@@ -1,5 +1,6 @@
 package com.example.jpanote.member.service;
 
+import com.example.jpanote.exception.BadCredentialsException;
 import com.example.jpanote.exception.DuplicateEmailException;
 import com.example.jpanote.exception.MemberNotFoundException;
 import com.example.jpanote.exception.WithdrawnMemberException;
@@ -22,7 +23,15 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
-	//회원 등록
+	/**
+	 * methodName : createMember
+	 * author : Jo Sang Hee
+	 * description : 회원 등록
+	 * Create member create response.
+	 *
+	 * @param request the request
+	 * @return the create response
+	 */
 	@Transactional
 	public CreateResponse createMember(CreateRequest request){
 		//비밀번호 암호화
@@ -44,7 +53,15 @@ public class MemberService {
 				.build();
 	}
 
-	//회원 조회
+	/**
+	 * methodName : readMember
+	 * author : Jo Sang Hee
+	 * description : 회원 조회
+	 * Read member read response.
+	 *
+	 * @param id the id
+	 * @return the read response
+	 */
 	public ReadResponse readMember(Long id){
 		//조회
 		Optional<MemberEntity> findMember = memberRepository.findById(id);
@@ -62,13 +79,19 @@ public class MemberService {
 				.build();
 	}
 
-	//회원 수정
+	/**
+	 * methodName : updateMember
+	 * author : Jo Sang Hee
+	 * description : 회원 수정
+	 * Update member update response.
+	 *
+	 * @param request the request
+	 * @return the update response
+	 */
 	@Transactional
 	public UpdateResponse updateMember(UpdateRequest request){
 		//중복 이메일 주소 확인
 		MemberEntity existingMember = memberRepository.findByMemberEmail(request.getMemberEmail());
-//		log.info("==============================================");
-//		log.info(existingMember);
 		if (existingMember != null && !existingMember.getId().equals(request.getId())) {
 			//이미 존재하는 이메일 주소인 경우 예외 처리 또는 오류 처리
 			throw new DuplicateEmailException("중복된 이메일 주소입니다.");
@@ -78,7 +101,6 @@ public class MemberService {
 		//조회
 		Optional<MemberEntity> findMember = memberRepository.findById(request.getId());
 		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
-//		log.info("----------------------------------------------");
 		//회원정보 수정
 		memberEntity.updateMember(
 				request.getMemberEmail(), request.getMemberName(), passwordEncoder.encode(request.getMemberPw())
@@ -96,7 +118,15 @@ public class MemberService {
 				.build();
 	}
 
-	//회원 탈퇴
+	/**
+	 * methodName : removeMember
+	 * author : Jo Sang Hee
+	 * description : 회원 탈퇴
+	 * Remove member long.
+	 *
+	 * @param id the id
+	 * @return the long
+	 */
 	@Transactional
 	public Long removeMember(Long id){
 		//조회
@@ -106,6 +136,36 @@ public class MemberService {
 		memberEntity.removeMember();
 		memberRepository.save(memberEntity);
 		return memberEntity.getId();
+	}
+
+	/**
+	 * methodName : LoginMember
+	 * author : Jo Sang Hee
+	 * description : 로그인
+	 * Login member long.
+	 *
+	 * @param request the request
+	 * @return the long
+	 */
+	@Transactional
+	public Long LoginMember(LoginRequest request){
+		//이메일 주소 확인
+		MemberEntity findMember = memberRepository.findByMemberEmail(request.getMemberEmail());
+
+		if (findMember == null) {
+			throw new BadCredentialsException("아이디 또는 비밀번호가 올바르지 않습니다.");
+		}
+		//DB에 저장된 비밀번호 가져옴
+		String userPassword = findMember.getMemberPw();
+
+		//사용자가 입력한 비밀번호와 데이터베이스에서 가져온 암호화된 비밀번호를 대조
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		boolean passwordMatches = passwordEncoder.matches(request.getMemberPw(), userPassword);
+		log.info("passwordMatches======" + passwordMatches);
+		if(!passwordMatches){
+			throw new BadCredentialsException("아이디 또는 비밀번호가 올바르지 않습니다.");
+		}
+		return findMember.getId();
 	}
 
 }

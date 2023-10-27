@@ -25,7 +25,7 @@ class MemberServiceTest {
 
 	//테스트 변수 선언
 	private static final Long TEST_MEMBER_NO = 1L;
-	private static final String TEST_MEMBER_EMAIL = "josh@plea.kr";
+	private static final String TEST_MEMBER_EMAIL = "josh1@plea.kr";
 	private static final String TEST_MEMBER_UPDATE_EMAIL = "plea@plea.kr";
 	private static final String TEST_MEMBER_NAME = "조상희";
 	private static final String TEST_MEMBER_PW = "1111";
@@ -52,7 +52,7 @@ class MemberServiceTest {
 
 	@Test
 	@DisplayName("회원 등록 Service 테스트")
-	@Transactional
+	//@Transactional
 	public void createMemberTest() throws Exception {
 		//given + when
 		memberService.createMember(createRequest);
