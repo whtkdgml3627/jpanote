@@ -75,6 +75,15 @@ public class MemberRestController {
 		return Map.of("memberId", memberId);
 	}
 
+	/**
+	 * methodName : login
+	 * author : Jo Sang Hee
+	 * description : 로그인
+	 * Login map.
+	 *
+	 * @param request the request
+	 * @return the map
+	 */
 	@PostMapping("/login")
 	public Map<String, Long> login(@RequestBody LoginRequest request){
 		Long memberId = memberService.LoginMember(request);
