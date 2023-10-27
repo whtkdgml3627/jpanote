@@ -10,7 +10,6 @@ import lombok.*;
 @ToString
 // 사용자에게 데이터를 반환하기 위한 DTO
 public class CreateResponse {
-
 	private String memberEmail;
 	private String memberName;
 

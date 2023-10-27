@@ -18,5 +18,4 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long>, NoteRep
 	@Query("select n from NoteEntity n where n.member.id = :sender_id")
 	Page<NoteEntity> senderList(@Param("sender_id") Long id, Pageable pageable);
 
-	//받은 쪽지함
 }

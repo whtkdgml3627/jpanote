@@ -141,8 +141,10 @@ public class NoteService {
 	//받은 쪽지 리스트
 	public List<ListResponse> getReceiverList(Long id, PagingRequest pagingRequest){
 		//페이징 처리
-		Pageable pageable = PageRequest.of(pagingRequest.getPage() - 1, pagingRequest.getSize(), Sort.by("id").descending());
-
+		Pageable pageable = PageRequest.of(pagingRequest.getPage() - 1,
+												pagingRequest.getSize(),
+												Sort.by("id").descending()
+		);
 		//DTO 타입으로 반환
 		return noteRepository.recevierList(id, pageable);
 	}

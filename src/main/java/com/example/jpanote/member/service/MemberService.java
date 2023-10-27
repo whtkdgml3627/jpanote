@@ -37,7 +37,10 @@ public class MemberService {
 		//비밀번호 암호화
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		//회원 등록
-		MemberEntity memberEntity = MemberEntity.createMember(request.getMemberEmail(), request.getMemberName(), passwordEncoder.encode(request.getMemberPw()));
+		MemberEntity memberEntity = MemberEntity.createMember(request.getMemberEmail(),
+																request.getMemberName(),
+																passwordEncoder.encode(request.getMemberPw())
+		);
 		//중복 이메일 주소 확인
 		MemberEntity existingMember = memberRepository.findByMemberEmail(memberEntity.getMemberEmail());
 		if (existingMember != null) {
