@@ -113,6 +113,8 @@ public class MemberService {
 			throw new DuplicateEmailException("동일한 이메일 주소입니다.");
 		}
 		//저장
+		//method에 @Transactional이 걸려있으면 save는 생략해도 update가 적용됩니다.
+		// 동작에는 문제가 없지만 save 내에 셀렉트 쿼리가 한번 더 나가므로 추천하지 않습니다.
 		memberRepository.save(memberEntity);
 		//DTO 타입 으로 반환
 		return UpdateResponse.builder()
@@ -133,7 +135,8 @@ public class MemberService {
 	@Transactional
 	public Long removeMember(Long id){
 		//조회
-		Optional<MemberEntity> findMember = memberRepository.findById(id);
+		// db에서 사용자를 delete 하는게 아니라 정보만 지우고 update 했기 때문에, findById 의 null check 만으로는 이미 탈퇴한 회원인지 구분할 수 없습니다.
+		Optional<MemberEntity> findMember = Optional.ofNullable(memberRepository.findByIdAndDelFlag(id, 0));
 		MemberEntity memberEntity = findMember.orElseThrow(() -> new MemberNotFoundException("조회 하신 회원이 존재하지 않습니다."));
 		//삭제
 		memberEntity.removeMember();

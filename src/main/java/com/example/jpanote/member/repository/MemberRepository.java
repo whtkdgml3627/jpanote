@@ -7,4 +7,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long>, Mem
 
 	//email 체크
 	MemberEntity findByMemberEmail (String memberEmail);
+
+	MemberEntity findByIdAndDelFlag(Long id, Integer delFlag);
 }
