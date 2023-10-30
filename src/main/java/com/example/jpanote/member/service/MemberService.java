@@ -113,6 +113,8 @@ public class MemberService {
 			throw new DuplicateEmailException("동일한 이메일 주소입니다.");
 		}
 		//저장
+		//method에 @Transactional이 걸려있으면 save는 생략해도 update가 적용됩니다.
+		// 동작에는 문제가 없지만 save 내에 셀렉트 쿼리가 한번 더 나가므로 추천하지 않습니다.
 		memberRepository.save(memberEntity);
 		//DTO 타입 으로 반환
 		return UpdateResponse.builder()
