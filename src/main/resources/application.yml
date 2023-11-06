@@ -28,3 +28,19 @@ logging:
       example:
         jpanote: debug
   config: classpath:logback/logback-spring.xml
+
+#swagger
+springdoc:
+  packages-to-scan: com.example.jpanote #스캔할 패키지 지정
+  default-consumes-media-type: application/json;charset=UTF-8 #요청 에서 사용할 Content-Type 미디어 유형 지정
+  default-produces-media-type: application/json;charset=UTF-8 #응답 에서 사용할 Content-Type 미디어 유형 지정
+  swagger-ui:
+    path: swagger-ui.html #UI 접근 경로
+    #tags-sorter: alpha #태그 정렬 알파벳 순
+    operations-sorter: method #API 정렬 알파벳 순
+  api-docs:
+    path: /api-docs/json #OpenAPI스펙을 얻기 위한 엔드포인트의 경로
+    groups:
+      enabled: true #그룹화된 API문서 사용 여부
+  cache:
+    disabled: true #API 문서 캐싱 사용 여부 (true: 비활성)

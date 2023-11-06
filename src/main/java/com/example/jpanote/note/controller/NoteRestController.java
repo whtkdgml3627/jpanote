@@ -3,7 +3,12 @@ package com.example.jpanote.note.controller;
 import com.example.jpanote.note.model.dto.*;
 import com.example.jpanote.note.service.NoteService;
 import com.example.jpanote.util.page.PagingRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -14,13 +19,21 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/note")
+@Tag(name = "쪽지 관리", description = "쪽지 API Document")
 public class NoteRestController {
 
 	private final NoteService noteService;
 
 	//쪽지 생성
 	@PostMapping("/send")
-	public CreateResponse create(@RequestBody CreateRequest request){
+	@Operation(summary = "쪽지 생성", description = "제목, 내용, 발신이메일, 수신이메일을 입력하여 쪽지를 생성 합니다.")
+	/*@Parameters({
+			@Parameter(name = "title", description = "쪽지 제목", example = "쪽지 발신 제목"),
+			@Parameter(name = "cont", description = "쪽지 내용", example = "쪽지 발신 내용"),
+			@Parameter(name = "senderEmail", description = "발신자 이메일", example = "plea@plea.kr"),
+			@Parameter(name = "receiverEmail", description = "수신자 이메일", example = "josh@plea.kr")
+	})*/
+	public CreateResponse create(@ParameterObject @RequestBody CreateRequest request){
 		return noteService.createNote(request);
 	}
 	
@@ -46,7 +59,9 @@ public class NoteRestController {
 
 	//보낸 쪽지 리스트
 	@GetMapping("/{id}/sender-list")
-	public List<ListResponse> getSenderList(@PathVariable Long id, PagingRequest pagingRequest){
+	@Operation(summary = "보낸 쪽지 리스트", description = "보낸 쪽지 리스트를 출력 합니다.")
+	public List<ListResponse> getSenderList(@Parameter(description = "보낸 사람 이메일 아이디 번호") @PathVariable Long id,
+	                                        @ParameterObject PagingRequest pagingRequest){
 		return noteService.getSenderList(id, pagingRequest);
 	}
 
