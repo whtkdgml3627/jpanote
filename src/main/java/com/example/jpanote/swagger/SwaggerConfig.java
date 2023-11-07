@@ -1,4 +1,4 @@
-package com.example.jpanote.config;
+package com.example.jpanote.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

@@ -6,6 +6,7 @@ import com.example.jpanote.util.page.PagingRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
@@ -33,26 +34,37 @@ public class NoteRestController {
 			@Parameter(name = "senderEmail", description = "발신자 이메일", example = "plea@plea.kr"),
 			@Parameter(name = "receiverEmail", description = "수신자 이메일", example = "josh@plea.kr")
 	})*/
-	public CreateResponse create(@ParameterObject @RequestBody CreateRequest request){
+	public CreateResponse create(
+			@ParameterObject @RequestBody CreateRequest request
+	){
 		return noteService.createNote(request);
 	}
 	
 	//쪽지 조회
 	@GetMapping("/read/{id}")
-	public ReadResponse getById(@PathVariable Long id){
+	@Operation(summary = "쪽지 조회", description = "쪽지 번호를 입력 하여 조회가 가능 합니다.")
+	public ReadResponse getById(
+			@Parameter(description = "쪽지 번호를 숫자로 입력 해 주세요", example = "1") @PathVariable Long id
+	){
 		return noteService.readNote(id);
 	}
 
 	//쪽지 내용 수정
 	@PutMapping("/modify")
-	public UpdateResponse update(@RequestBody UpdateRequest request){
+	@Operation(summary = "쪽지 내용 수정", description = "쪽지 번호를 입력 후 제목, 내용 을 수정 합니다.")
+	public UpdateResponse update(
+			@ParameterObject @RequestBody UpdateRequest request
+	){
 		if(request.getId() == null) throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
 		return noteService.updateNote(request);
 	}
 
 	//쪽지 삭제
+	@Operation(summary = "쪽지 삭제", description = "쪽지 번호를 입력 하여 삭제가 가능 합니다.")
 	@DeleteMapping("/remove/{id}")
-	public Map<String, Long> remove(@PathVariable Long id){
+	public Map<String, Long> remove(
+			@Parameter(description = "쪽지 번호를 숫자로 입력 해 주세요", example = "1") @PathVariable Long id
+	){
 		Long noteId = noteService.removeNote(id);
 		return Map.of("noteId", noteId);
 	}
@@ -60,14 +72,20 @@ public class NoteRestController {
 	//보낸 쪽지 리스트
 	@GetMapping("/{id}/sender-list")
 	@Operation(summary = "보낸 쪽지 리스트", description = "보낸 쪽지 리스트를 출력 합니다.")
-	public List<ListResponse> getSenderList(@Parameter(description = "보낸 사람 이메일 아이디 번호") @PathVariable Long id,
-	                                        @ParameterObject PagingRequest pagingRequest){
+	public List<ListResponse> getSenderList(
+			@Parameter(description = "보낸 사람 이메일 아이디 번호를 숫자로 입력 해 주세요", example = "1") @PathVariable Long id,
+			@ParameterObject PagingRequest pagingRequest
+	){
 		return noteService.getSenderList(id, pagingRequest);
 	}
 
 	//받은 쪽지 리스트
 	@GetMapping("/{id}/receiver-list")
-	public List<ListResponse> getReceiverList(@PathVariable Long id, PagingRequest pagingRequest){
+	@Operation(summary = "받은 쪽지 리스트", description = "받은 쪽지 리스트를 출력 합니다.")
+	public List<ListResponse> getReceiverList(
+			@Parameter(description = "받은 사람 이메일 아이디 번호를 숫자로 입력 해 주세요", example = "2") @PathVariable Long id,
+			@ParameterObject PagingRequest pagingRequest
+	){
 		return noteService.getReceiverList(id, pagingRequest);
 	}
 
